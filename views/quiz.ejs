@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guess The Capital 🗺️</title>
+  <link rel="stylesheet" href="/styles/quiz.css">
+</head>
+
+<body id="app">
+  <form class="container" action="/submit" method="post">
+    <div class="horizontal-container">
+      <h3>Score:
+        <span id="score"><%= locals.totalScore ? totalScore : "0" %></span>
+      </h3>
+    </div>
+    <h1 id="countryName">
+      <% if (question.flagUrl) { %>
+        <img src="<%= question.flagUrl %>" class="flag-img">
+      <% } %>
+      <%= question.country %>
+    </h1>
+    <div class="answer-container">
+      <input type="text" name="answer" id="userInput" placeholder="Enter your answer ⌨️" autofocus autocomplete="off">
+    </div>
+    <button type="submit">
+      Check
+      <% if(locals.wasCorrect){ %>
+        <span class="checkmark">✔</span>
+      <% } else if (locals.wasCorrect === false) { %>
+        <span class="cross" id="error">✖</span>
+      <% } %>
+    </button>
+  </form>
+  <script>
+    var wasCorrect = "<%= locals.wasCorrect %>";
+    if (wasCorrect === "false") {
+      const correctAnswer = "<%= locals.correctAnswer %>";
+      const correctFlag   = "<%= locals.correctFlag %>";
+      document.body.classList.add("game-over");
+      document.body.innerHTML = `
+        <div class="game-over-overlay"></div> 
+        <div class="game-over-screen">
+        <h2>😵 Game Over 😵</h2><p class="final-score">Final Score: <strong><%= locals.totalScore %></strong></p>
+        <p class="correct-answer">Correct Answer:
+        ${correctFlag ? `<img src="${correctFlag}" class="flag-img" style="width:40px;">` : ""}<strong>${correctAnswer}</strong></p>
+        <a href="/" class="restart-btn">Restart 🔄️</a></div>`;
+    }
+  </script>
+</body>
+</html>
